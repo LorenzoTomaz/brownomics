@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "brownomics-api"
+version = "0.1.0"
+description = "Bronowmics api"
+authors = ["Brownomics <lolo.tomaz@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.101.0"
+uvicorn = "^0.23.2"
+pydantic = "^2.1.1"
+motor = "^3.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.21.1"
+pytest-trio = "^0.8.0"
+pytest-mock = "^3.11.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
