@@ -1,0 +1,5 @@
+potassium
+torch
+transformers
+pybrownomics==0.2.3
+pydantic
