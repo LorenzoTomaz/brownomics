@@ -712,13 +712,13 @@ testing = ["pytest", "pytest-benchmark"]
 
 [[package]]
 name = "pybrownomics"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 optional = false
 python-versions = ">=3.9.13,<3.13"
 files = [
-    {file = "pybrownomics-0.1.0-py3-none-any.whl", hash = "sha256:4e0b0d8b36129218b93133e01861b0c9b1f0676aa47dacfa7dc6f3a546e52f82"},
-    {file = "pybrownomics-0.1.0.tar.gz", hash = "sha256:6fbf20288295557f201cf94d5e3c3fd6d6f1f54ad1103fb4d48e365ff52d986a"},
+    {file = "pybrownomics-0.2.0-py3-none-any.whl", hash = "sha256:fe9087cfe100c80454888fec6adb7dfdf145c99b6cb08e4bd47708d4af8497a6"},
+    {file = "pybrownomics-0.2.0.tar.gz", hash = "sha256:801b6ecbeffe4a96c2a0b9073b0bd92e93f3bc46879471428ac8568f94f43dc0"},
 ]
 
 [package.dependencies]
@@ -1159,4 +1159,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9.13,<3.13"
-content-hash = "07a91d98b5ba6a2d798831d37a7de26a66c28498059051a65af7ac568910eb44"
+content-hash = "ea46257b43ce1601e6918e9c72e83faf0db5920e3ea895966a93b1143460183a"

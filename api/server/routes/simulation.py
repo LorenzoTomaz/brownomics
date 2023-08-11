@@ -13,7 +13,7 @@ router = APIRouter()
 async def run_simulation_control(simulation: SimulationControlSchema = Body(...)):
     data = run_optimal_control_simulation(simulation.initial_state, simulation.time_horizon, simulation.p_tok_t, simulation.s_t, simulation.gamma, simulation.expected_future_price, simulation.initial_population, simulation.adoption_rate)
 
-    return ResponseModel(data, "simulation added successfully.")
+    return ResponseModel([data], "simulation added successfully.")
 
 @router.post("/brown", response_description="Simulation data added into the database")
 async def run_simulation_brown(simulation: SimulationBrownSchema = Body(...)):
