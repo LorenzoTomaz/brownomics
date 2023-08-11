@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "Hardhat individual test",
+            "type": "node",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/web3",
+            "runtimeExecutable": "yarn",
+            "runtimeArgs": [
+                "test",
+                "${workspaceFolder}/web3/test/ModelMarketplace.ts"
+            ]
+        }
+    ]
+}
