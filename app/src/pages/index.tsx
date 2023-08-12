@@ -155,7 +155,7 @@ export default function Home() {
         </div>
       </div>
       <div className="section" style={{ backgroundColor: "#4263eb" }}>
-        <div className="container mt-2xl mb-2xl">
+        <div className="container mt-lg mb-2xl">
           <div className="row items-center">
             <div className="column align-center">
               <h1 className="max-w-lg text-giga text-center text-white">
@@ -172,64 +172,14 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="section pb-2xl-m bg-white">
-        <div className="container mt-2xl mb-2xl">
-          <div className="row v-l">
-            <div className="column align-left">
-              <div className="emoji lg">🌎</div>
-              <a href="#" className="u mt-lg">
-                info@email.com
-              </a>
-              <div className="row mt-lg ml-md-n">
-                <a href="#" target="_blank" className="p-md w-inline-block">
-                  <img
-                    src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
-                    data-feather="twitter"
-                    alt=""
-                    className="icon"
-                  />
-                </a>
-                <a href="#" target="_blank" className="p-md w-inline-block">
-                  <img
-                    src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
-                    data-feather="instagram"
-                    alt=""
-                    className="icon"
-                  />
-                </a>
-                <a href="#" target="_blank" className="p-md w-inline-block">
-                  <img
-                    src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg"
-                    data-feather="linkedin"
-                    alt=""
-                    className="icon"
-                  />
-                </a>
-              </div>
-            </div>
-            <div className="column align-left">
-              <h6 className="max-w-lg mb-xl footer-header">Company</h6>
-              <div>About</div>
-              <div className="mt-md">Customers</div>
-              <div className="mt-md">Jobs</div>
-              <div className="mt-md">Blog</div>
-            </div>
-            <div className="column align-left">
-              <h6 className="max-w-lg mb-xl footer-header">Contact</h6>
-              <div>Support</div>
-              <div className="mt-md">Sales</div>
-            </div>
-            <div className="column align-left">
-              <h6 className="max-w-lg mb-xl footer-header">Resources</h6>
-              <div>Podcast</div>
-              <div className="mt-md">Help Center</div>
-            </div>
-          </div>
-          <div className="border-t mt-xl">
-            <div className="row mt-xl v-l">
-              <div className="column align-left">
+      <div className="section  bg-white">
+        <div className="container mt-lg mb-lg">
+          <div className="border-t ">
+            <div className="row v-l">
+              <div className="column align-center">
                 <div className="muted text-sm">
-                  © No copyright I guess? Do whatever you want with the site
+                  Made with love by ❤️ by{" "}
+                  <Link href="https://ae.studio">AE Studio</Link>
                 </div>
               </div>
             </div>
