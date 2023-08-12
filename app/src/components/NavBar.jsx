@@ -1,14 +1,52 @@
-import Link from "next/link";
-import { useState } from "react";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import 'react-toastify/dist/ReactToastify.css';
+
+import React, { useState } from 'react';
+
+import { toast } from 'react-toastify';
+
+import * as Label from '@radix-ui/react-label';
+import {
+  Flex,
+  Select,
+  Slider,
+  TextField,
+} from '@radix-ui/themes';
+import { ConnectWallet } from '@thirdweb-dev/react';
+
 export default function NavBar() {
   const [show, setShow] = useState(true);
+  // this.value=this.value.replace(/[^0-9]/g,'')
+  const [value, setValue] = useState({
+    initialState: 100.0,
+    timeHorizon: 365,
+    nSimulation: 1,
+    pTokT: 10,
+    sT: 1000000,
+    gama: 0.9,
+    expectedFuturePrice: 11,
+    initialPopulation: 100,
+    adoptionRate: 0.1
+  })
+
+  const onChange = (field, newValue) => {
+    setValue({
+      ...value,
+      [field]: newValue
+    })
+  }
+
+
+  const simulate = () => {
+    console.log(value)
+    if(!value.model){
+      toast("Model is required", { type: "error"})
+      return
+    }
+  }
 
   return (
     <div
-      className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${
-        show ? "w-72" : "w-12"
-      }`}
+      className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${show ? "w-96" : "w-12" }`}
     >
       <div className="relative h-10">
         <button
@@ -54,7 +92,7 @@ export default function NavBar() {
       </div>
       {show && (
         <nav className="grid grid-rows-2 grid-flow-col gap-4 h-[92%]">
-          <div className="flex items-start justify-center mt-8">
+          <div className="flex flex-col items-start justify-center h-fit px-6 gap-6">
             <div className="flex items-center">
               <svg
                 className="h-12 w-12"
@@ -79,14 +117,101 @@ export default function NavBar() {
                 BROWNOMICS
               </span>
             </div>
-          </div>
-          <div className="flex justify-center items-end h-full">
-            <ConnectWallet
-              dropdownPosition={{
-                side: "bottom",
-                align: "center",
-              }}
-            />
+            <Flex direction="column" gap="4" width="100%" className='text-white text-extrabold'>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Model
+                </Label.Root>
+                <Select.Root value={value.model} onValueChange={modelValue => onChange('model', modelValue)}>
+                  <Select.Trigger placeholder="Select a model" />
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="A" onSelect={a => alert(a)}>A</Select.Item>
+                      <Select.Item value="B">B</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Interval
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input placeholder="Interval" type='number' min={0} max={366} maxLength={3} value={value.initialState} onChange={(e) => onChange('interval', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Time Horizon
+                </Label.Root>
+                <Slider width="100%" defaultValue={[value.timeHorizon]} min={0} max={366} variant="classic" className='bg-blue-600' onValueChange={newValue => onChange('timeHorizon', newValue)} />
+                {value.timeHorizon}
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  N Simulation
+                </Label.Root>
+                <Slider width="100%" defaultValue={[value.nSimulation]} min={1} max={2} variant="classic" className='bg-blue-600' onValueChange={newValue => onChange('nSimulation', newValue)} />
+                {value.nSimulation}
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  p Tok t
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.pTokT} onChange={(e) => onChange('pTokT', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  sT
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.sT} onChange={(e) => onChange('sT', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Gama
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.gama} onChange={(e) => onChange('gama', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Expected Future Price
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.expectedFuturePrice} onChange={(e) => onChange('expectedFuturePrice', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Initial Population
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.initialPopulation} onChange={(e) => onChange('initialPopulation', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className='font-semibold'>
+                  Adoption Rate
+                </Label.Root>
+                <TextField.Root>
+                  <TextField.Input type='number' value={value.adoptionRate} onChange={(e) => onChange('adoptionRate', e.target.value)} />
+                </TextField.Root>
+              </Flex>
+              <button type='submit' className='bg-blue-600 py-1.5 rounded w-full' onClick={simulate}>Run</button>
+              <div className='flex my-10 w-full justify-center'>
+                <ConnectWallet className='my-10 w-full'
+                  dropdownPosition={{
+                    side: "bottom",
+                    align: "center",
+                  }}
+                />
+              </div>
+            </Flex>
           </div>
         </nav>
       )}
