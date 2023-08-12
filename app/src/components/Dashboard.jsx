@@ -1,28 +1,39 @@
-import { useContract, useContractRead } from "@thirdweb-dev/react";
+import {
+  useContract,
+  useAddress,
+  useContractRead,
+  useUser,
+} from "@thirdweb-dev/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import abi from "../utils/abi.ts";
 import axios from "axios";
+
 const Plot = dynamic(import("react-plotly.js"), {
   ssr: false,
 });
 
 export default function Dashboard() {
   const [simulationData, setSimulationData] = useState({});
+  const address = useAddress();
+  const { user, isLoggedIn } = useUser();
   const { contract, isLoading } = useContract(
     process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
     abi
   );
+
   const { data: modelsList, error } = useContractRead(
     contract,
     "getListedModels",
     []
   );
+
   const getSimulations = async () => {
     const response = await axios.get("/api/simulation");
     console.log(response.data);
     setSimulationData(response.data);
   };
+
   const getSeries = () => {
     const series = simulationData?.simulations?.data?.series;
     const serie = series[0].series;
@@ -31,19 +42,29 @@ export default function Dashboard() {
       y: serie,
     };
   };
+
   useEffect(() => {
     if (contract) {
       console.log("Contract loaded!");
     }
-  }, [contract]);
-  useEffect(() => {
     if (modelsList) {
-      console.log(modelsList[0]);
+      console.log("modelsList", modelsList);
     }
-  }, [modelsList]);
+  }, [contract, modelsList]);
+
   useEffect(() => {
     getSimulations();
   }, []);
+
+  async function run() {
+    const userModels = await contract.call("listUserModels", [address]);
+    // if()
+  }
+
+  async function add() {
+    await contract.call("addModel", ["brown", 2]);
+  }
+
   return (
     <div className="container mx-auto px-12 py-24">
       <h3 className="text-gray-700 text-3xl font-bold">
@@ -97,6 +118,10 @@ export default function Dashboard() {
                 />
               </div>
             )}
+
+            <button onClick={run}>Issso Top!</button>
+            <button onClick={add}>Add new Model</button>
+            <button onClick={add}>Buy Model</button>
           </div>
         </div>
       </div>
