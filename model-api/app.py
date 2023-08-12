@@ -1,4 +1,6 @@
 from potassium import Potassium, Request, Response
+
+app = Potassium("simulation-model-api")
 from pydantic import ValidationError
 
 from models.model import (
@@ -9,8 +11,6 @@ from models.model import (
 )
 from pybrownomics import run_brown_simulation, run_optimal_control_simulation
 
-app = Potassium("simulation-model-api")
-
 
 @app.init
 def init():
@@ -19,15 +19,8 @@ def init():
     return {"model": model}
 
 
-@app.handler("/")
-def root(context: dict, request: Request) -> Response:
-    return Response(
-        json=ResponseModel(data=None, message="Model API is running"), status=200
-    )
-
-
-@app.handler("/simulation/control")
-def optimal_control_simulation(context: dict, request: Request) -> Response:
+@app.handler("/control")
+def handler(context, request: Request) -> Response:
     try:
         payload = SimulationControlSchema(**request.json)
         simulations = run_optimal_control_simulation(**payload.model_dump())
@@ -49,8 +42,8 @@ def optimal_control_simulation(context: dict, request: Request) -> Response:
         )
 
 
-@app.handler("/simulation/brown")
-def brown_simulation(context: dict, request: Request) -> Response:
+@app.handler("/brown")
+def handler(context: dict, request: Request) -> Response:
     try:
         payload = SimulationBrownSchema(**request.json)
         simulations = run_brown_simulation(**payload.model_dump())
