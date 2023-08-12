@@ -40,10 +40,10 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <div className="section overflow-hidden">
+      <div className="flex justify-center">
         <div className="container mt-3xl mb-3xl">
           <div className="row">
-            <div className="column align-center">
+            <div className="flex justify-center column align-center">
               <h1 className="test-giga text-center">
                 Unlock economic insights and forecast market trends with
                 Brownomics.
@@ -55,64 +55,10 @@ export default function Home() {
                 Brownomics, you&#39;ll have the power to make informed decisions
                 and stay ahead of the curve.
               </p>
-              <a href="#" className="button xl main mt-lg w-button">
+              <Link href="/dashboard" className="button xl main mt-lg w-button">
                 {" "}
                 Start Predicting Now
-              </a>
-              <div className="text-sm mt-md muted">
-                14 day free trial • No credit card required
-              </div>
-              <div className="text-sm mt-2xl text-center">
-                Show credibility with social proof. Logos of press coverage or
-                biggest customers
-              </div>
-              <div
-                className="
-                row
-                items-center
-                mt-lg
-                _w-full
-                max-w-lg
-                wrap
-                justify-center
-              "
-              >
-                <div className="logo-container">
-                  <img
-                    src="http://api.writesonic.com/static/images/Groups.png"
-                    alt="intercom logo"
-                    className="intercom"
-                  />
-                </div>
-                <div className="logo-container">
-                  <img
-                    src="http://api.writesonic.com/static/images/Group.png"
-                    alt=""
-                    className="buffer"
-                  />
-                </div>
-                <div className="logo-container ph">
-                  <img
-                    src="http://api.writesonic.com/static/images/product-hunt-1.png"
-                    alt=""
-                    className="product-hunt"
-                  />
-                </div>
-                <div className="logo-container">
-                  <img
-                    src="http://api.writesonic.com/static/images/icon_slack.png"
-                    alt=""
-                    className="slack"
-                  />
-                </div>
-                <div className="logo-container">
-                  <img
-                    src="http://api.writesonic.com/static/images/580b57fcd9996e24bc43c513.png"
-                    alt=""
-                    className="airbnb"
-                  />
-                </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -214,13 +160,13 @@ export default function Home() {
               <h1 className="max-w-lg text-giga text-center text-white">
                 Unlock the power of economic forecasting with Brownomics.
               </h1>
-              <a href="#" className="button xl main white mt-lg w-button">
+              <Link
+                href="/dashboard"
+                className="button xl main white mt-lg w-button"
+              >
                 {" "}
                 Start Predicting Now
-              </a>
-              <div className="faded text-sm mt-md">
-                14 day free trial • No credit card required
-              </div>
+              </Link>
             </div>
           </div>
         </div>
