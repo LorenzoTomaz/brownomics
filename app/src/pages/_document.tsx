@@ -40,18 +40,10 @@ export default function Document() {
         <meta content="summary_large_image" name="twitter:card" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="Webflow" name="generator" />
+        <link href="/css/normalize.css" rel="stylesheet" type="text/css" />
+        <link href="/css/webflow.css" rel="stylesheet" type="text/css" />
         <link
-          href="http://api.writesonic.com/static/css/normalize.css"
-          rel="stylesheet"
-          type="text/css"
-        />
-        <link
-          href="http://api.writesonic.com/static/css/webflow.css"
-          rel="stylesheet"
-          type="text/css"
-        />
-        <link
-          href="http://api.writesonic.com/static/css/lander-409e35.webflow.css"
+          href="/css/lander-409e35.webflow.css"
           rel="stylesheet"
           type="text/css"
         />
@@ -76,14 +68,11 @@ export default function Document() {
     })(window, document);
   </script> */}
         <link
-          href="http://api.writesonic.com/static/images/favicon.png"
+          href="/images/favicon.png"
           rel="shortcut icon"
           type="image/x-icon"
         />
-        <link
-          href="http://api.writesonic.com/static/images/webclip.png"
-          rel="apple-touch-icon"
-        />
+        <link href="/images/webclip.png" rel="apple-touch-icon" />
         <Script src="https://unpkg.com/feather-icons"></Script>
       </head>
       <body>
