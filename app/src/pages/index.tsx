@@ -242,10 +242,6 @@ export default function Home() {
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossOrigin="anonymous"
       ></Script>
-      <Script
-        src="http://api.writesonic.com/static/js/webflow.js"
-        type="text/javascript"
-      ></Script>
     </div>
   );
 }
