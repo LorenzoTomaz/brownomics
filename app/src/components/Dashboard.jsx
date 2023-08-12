@@ -65,18 +65,18 @@ export default function Dashboard() {
               while using our platform.
             </p> */}
             <p>
-              Our platform's simulation of token price variations is a powerful
-              tool for understanding the dynamics of our token's value. We
-              achieved this by integrating historical data and mathematical
-              models into our system. As users interact with the platform, their
-              actions influence the token's supply and demand, causing price
-              shifts. The simulation takes into account factors such as buying,
-              selling, and external events, then projects how these actions
-              might impact the token's value over time. This enables us to
-              anticipate potential trends and ensure our tokenomics strategy
-              aligns with user behavior. By observing the simulated price
-              changes, users gain valuable insights into the token's journey
-              within our ecosystem.
+              Our platform&apos;s simulation of token price variations is a
+              powerful tool for understanding the dynamics of our token&apos;s
+              value. We achieved this by integrating historical data and
+              mathematical models into our system. As users interact with the
+              platform, their actions influence the token&apos;s supply and
+              demand, causing price shifts. The simulation takes into account
+              factors such as buying, selling, and external events, then
+              projects how these actions might impact the token&apos;s value
+              over time. This enables us to anticipate potential trends and
+              ensure our tokenomics strategy aligns with user behavior. By
+              observing the simulated price changes, users gain valuable
+              insights into the token&apos;s journey within our ecosystem.
             </p>
 
             {simulationData?.simulations?.data && (
