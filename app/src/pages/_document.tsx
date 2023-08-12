@@ -7,17 +7,11 @@ export default function Document() {
       <Head />
       <head>
         <meta charSet="utf-8" />
-        <title>Lander | Landing Page Copywriting Template</title>
+        <title>Brownomics - Tokenomics Insightss</title>
+        <meta content="Brownomics - Tokenomics Insights" name="description" />
+        <meta content="Brownomics" property="og:title" />
         <meta
-          content="Convert visitors into customers through powerful positioning and crystal-clear messaging. Use Lander as a copywriting template to communicate your value to your audience"
-          name="description"
-        />
-        <meta
-          content="Lander | Landing Page Copywriting Template"
-          property="og:title"
-        />
-        <meta
-          content="Convert visitors into customers through powerful positioning and crystal-clear messaging. Use Lander as a copywriting template to communicate your value to your audience"
+          content="Brownomics - Tokenomics Insights"
           property="og:description"
         />
         <meta
@@ -25,11 +19,11 @@ export default function Document() {
           property="og:image"
         />
         <meta
-          content="Lander | Landing Page Copywriting Template"
+          content="Brownomics - Tokenomics Insights"
           property="twitter:title"
         />
         <meta
-          content="Convert visitors into customers through powerful positioning and crystal-clear messaging. Use Lander as a copywriting template to communicate your value to your audience"
+          content="Brownomics - Tokenomics Insights"
           property="twitter:description"
         />
         <meta
@@ -47,26 +41,6 @@ export default function Document() {
           rel="stylesheet"
           type="text/css"
         />
-        {/* <script>
-    window.onload = function () {
-      if (window.location.protocol !== 'http') {
-        const metaTag = document.createElement('meta');
-        metaTag.setAttribute('http-equiv', 'Content-Security-Policy');
-        metaTag.setAttribute('content', 'upgrade-insecure-requests');
-        document.head.appendChild(metaTag);
-      }
-    }
-  </script>
-  <script type="text/javascript">
-    !(function (o, c) {
-      var n = c.documentElement,
-        t = " w-mod-";
-      (n.className += t + "js"),
-      ("ontouchstart" in o ||
-        (o.DocumentTouch && c instanceof DocumentTouch)) &&
-      (n.className += t + "touch");
-    })(window, document);
-  </script> */}
         <link
           href="/images/favicon.png"
           rel="shortcut icon"
