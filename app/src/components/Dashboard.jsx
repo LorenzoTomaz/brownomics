@@ -1,8 +1,9 @@
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import abi from "../utils/abi.ts";
 import axios from "axios";
+import computeKpis, { Kpis } from "../math/index.ts";
 const Plot = dynamic(import("react-plotly.js"), {
   ssr: false,
 });
@@ -13,6 +14,7 @@ export default function Dashboard() {
     process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
     abi
   );
+  const [kpis, setKpis] = useState({});
   const { data: modelsList, error } = useContractRead(
     contract,
     "getListedModels",
@@ -20,8 +22,11 @@ export default function Dashboard() {
   );
   const getSimulations = async () => {
     const response = await axios.get("/api/simulation");
-    console.log(response.data);
     setSimulationData(response.data);
+    const series = response?.data?.simulations?.data?.series;
+    const serie = series[0].series;
+    const kpis = computeKpis(serie);
+    setKpis(kpis);
   };
   const getSeries = () => {
     const series = simulationData?.simulations?.data?.series;
@@ -79,7 +84,7 @@ export default function Dashboard() {
               insights into the token&apos;s journey within our ecosystem.
             </p>
 
-            {simulationData?.simulations?.data && (
+            {simulationData?.simulations?.data && kpis?.movingInflation && (
               <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
                 <Plot
                   data={[
@@ -93,6 +98,20 @@ export default function Dashboard() {
                   ]}
                   layout={{
                     title: `Token price (USD)`,
+                  }}
+                />
+                <Plot
+                  data={[
+                    {
+                      x: kpis.movingInflation.x,
+                      y: kpis.movingInflation.y,
+                      type: "scatter",
+                      mode: "lines",
+                      marker: { color: "blue" },
+                    },
+                  ]}
+                  layout={{
+                    title: `Moving inflation`,
                   }}
                 />
               </div>

@@ -9,9 +9,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  console.log(
-    `${process.env.NEXT_PUBLIC_TEMPLATE_MODEl_API_URL!}/simulation/control`
-  );
   const simulations = await axios.post(
     `${process.env.NEXT_PUBLIC_TEMPLATE_MODEl_API_URL!}/simulation/control`,
     {}
