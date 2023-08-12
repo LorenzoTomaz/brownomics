@@ -173,14 +173,12 @@ export default function Home() {
         </div>
       </div>
       <div className="section  bg-white">
-        <div className="container mt-lg mb-lg">
-          <div className="border-t ">
-            <div className="row v-l">
-              <div className="column align-center">
-                <div className="muted text-sm">
-                  Made with love by ❤️ by{" "}
-                  <Link href="https://ae.studio">AE Studio</Link>
-                </div>
+        <div className="container mt-xl mb-xl">
+          <div className="row">
+            <div className="column align-center">
+              <div className="muted text-lg">
+                Made with love by ❤️ by{" "}
+                <Link href="https://ae.studio">AE Studio</Link>
               </div>
             </div>
           </div>
