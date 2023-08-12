@@ -1,4 +1,5 @@
 import { Head, Html, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 export default function Document() {
   return (
@@ -83,7 +84,7 @@ export default function Document() {
           href="http://api.writesonic.com/static/images/webclip.png"
           rel="apple-touch-icon"
         />
-        <script src="https://unpkg.com/feather-icons"></script>
+        <Script src="https://unpkg.com/feather-icons"></Script>
       </head>
       <body>
         <Main />

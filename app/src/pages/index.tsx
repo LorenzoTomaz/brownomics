@@ -3,6 +3,7 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import Dashboard from "../components/Dashboard";
 import NavBar from "../components/NavBar";
 import Link from "next/link";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -235,16 +236,16 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <script
+      <Script
         src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js?site=5ea1b995c6b4c10f74406a08"
         type="text/javascript"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossOrigin="anonymous"
-      ></script>
-      <script
+      ></Script>
+      <Script
         src="http://api.writesonic.com/static/js/webflow.js"
         type="text/javascript"
-      ></script>
+      ></Script>
     </div>
   );
 }
