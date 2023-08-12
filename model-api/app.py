@@ -59,4 +59,4 @@ def handler(context, request: Request) -> Response:
 
 
 if __name__ == "__main__":
-    app.serve(port=5000)
+    app.serve()
