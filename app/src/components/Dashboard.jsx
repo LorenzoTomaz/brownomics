@@ -1,73 +1,102 @@
+import { useContract, useContractRead } from "@thirdweb-dev/react";
 import dynamic from "next/dynamic";
-
+import { useEffect, useState } from "react";
+import abi from "../utils/abi.ts";
+import axios from "axios";
 const Plot = dynamic(import("react-plotly.js"), {
   ssr: false,
 });
 
 export default function Dashboard() {
+  const [simulationData, setSimulationData] = useState({});
+  const { contract, isLoading } = useContract(
+    process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
+    abi
+  );
+  const { data: modelsList, error } = useContractRead(
+    contract,
+    "getListedModels",
+    []
+  );
+  const getSimulations = async () => {
+    const response = await axios.get("/api/simulation");
+    console.log(response.data);
+    setSimulationData(response.data);
+  };
+  const getSeries = () => {
+    const series = simulationData?.simulations?.data?.series;
+    const serie = series[0].series;
+    return {
+      x: new Array(serie.length).fill(0).map((_, i) => i + 1),
+      y: serie,
+    };
+  };
+  useEffect(() => {
+    if (contract) {
+      console.log("Contract loaded!");
+    }
+  }, [contract]);
+  useEffect(() => {
+    if (modelsList) {
+      console.log(modelsList[0]);
+    }
+  }, [modelsList]);
+  useEffect(() => {
+    getSimulations();
+  }, []);
   return (
     <div className="container mx-auto px-12 py-24">
-      <h3 className="text-gray-700 text-3xl font-bold">Demo BROWNOMICS</h3>
+      <h3 className="text-gray-700 text-3xl font-bold">
+        Utility Token Simulation model
+      </h3>
       <div className="flex flex-col mt-8">
         <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div className="flex flex-col gap-6 min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200 text-gray-700 p-4 ">
+          <div className="flex flex-col gap-6 min-w-full overflow-hidden sm:rounded-lg text-gray-700 p-4 ">
+            {/* <p>
+              Understanding Token Price Fluctuations: In the world of web
+              applications, token prices can change due to various factors,
+              similar to how stocks fluctuate in the financial markets. The
+              chart you see on this page visualizes these changes over time.
+              This information is crucial for grasping our tokenomics strategy,
+              which involves how we manage the supply and demand of the tokens.
+              By studying the chart, you can gain insights into how external
+              factors and user interactions impact token prices. Keep in mind
+              that analyzing these patterns can help you make informed decisions
+              while using our platform.
+            </p> */}
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry&apos;s standard dummy
-              text ever since the 1500s, when an unknown printer took a galley
-              of type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged. It was
-              popularised in the 1960s with the release of Letraset sheets
-              containing Lorem Ipsum passages, and more recently with desktop
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
+              Our platform's simulation of token price variations is a powerful
+              tool for understanding the dynamics of our token's value. We
+              achieved this by integrating historical data and mathematical
+              models into our system. As users interact with the platform, their
+              actions influence the token's supply and demand, causing price
+              shifts. The simulation takes into account factors such as buying,
+              selling, and external events, then projects how these actions
+              might impact the token's value over time. This enables us to
+              anticipate potential trends and ensure our tokenomics strategy
+              aligns with user behavior. By observing the simulated price
+              changes, users gain valuable insights into the token's journey
+              within our ecosystem.
             </p>
 
-            <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
-              <Plot
-                data={[
-                  {
-                    x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                    y: [1, 2, 3, 6, 5, 7, 12, 15, 17, 25, 50],
-                    type: "scatter",
-                    mode: "lines",
-                    marker: { color: "red" },
-                  },
-                  {
-                    x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-                    y: [1, 1, 1.5, 2, 3, 2.5, 4, 4, 5, 3],
-                    type: "scatter",
-                    mode: "lines",
-                    marker: { color: "blue" },
-                  },
-                ]}
-                layout={{ width: 520, height: 440, title: `My Cool Graph` }}
-              />
-
-              <Plot
-                data={[
-                  {
-                    x: [1, 2, 3, 4],
-                    y: [0, 2, 3, 5],
-                    fill: "tozeroy",
-                    type: "scatter",
-                  },
-                  {
-                    x: [1, 2, 3, 4],
-                    y: [3, 5, 1, 7],
-                    fill: "tonexty",
-                    type: "scatter",
-                  },
-                ]}
-                layout={{
-                  width: 520,
-                  height: 440,
-                  title: `My Cool Graph`,
-                  xaxis: { fixedrange: true },
-                }}
-              />
-            </div>
+            {simulationData?.simulations?.data && (
+              <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
+                <Plot
+                  data={[
+                    {
+                      x: getSeries()["x"],
+                      y: getSeries()["y"],
+                      type: "scatter",
+                      mode: "lines",
+                      marker: { color: "red" },
+                    },
+                  ]}
+                  layout={{
+                    title: `Token price (USD)`,
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
