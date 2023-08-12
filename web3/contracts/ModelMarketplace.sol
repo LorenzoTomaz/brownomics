@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract ModelMarketplace is Ownable {
     struct Model {
+        uint256 id;
         string name;
         uint256 price;
     }
@@ -32,7 +33,7 @@ contract ModelMarketplace is Ownable {
         require(!modelExists[_modelId], "Model already exists");
         require(_price > 0, "Price must be greater than zero");
 
-        models[_modelId] = Model({name: _name, price: _price});
+        models[_modelId] = Model({name: _name, price: _price, id: _modelId});
         modelExists[_modelId] = true;
         listedModels.push(models[_modelId]);
         modelCount++;
