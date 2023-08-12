@@ -19,6 +19,13 @@ def init():
     return {"model": model}
 
 
+@app.handler("/")
+def root(context: dict, request: Request) -> Response:
+    return Response(
+        json=ResponseModel(data=None, message="Model API is running"), status=200
+    )
+
+
 @app.handler("/simulation/control")
 def optimal_control_simulation(context: dict, request: Request) -> Response:
     try:
