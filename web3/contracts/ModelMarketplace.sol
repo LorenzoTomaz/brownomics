@@ -12,14 +12,20 @@ contract ModelMarketplace is Ownable {
     uint256 public modelCount = 0;
     mapping(uint256 => Model) public models;
     mapping(uint256 => bool) public modelExists;
-
+    Model[] public listedModels;
     mapping(address => mapping(uint256 => bool)) public userHasModel;
     mapping(address => uint256[]) public userModels;
 
     event ModelAdded(uint256 indexed modelId, string name, uint256 price);
     event ModelPurchased(address indexed user, uint256 modelId);
 
-    constructor() {}
+    constructor() {
+        addModel("Optimal control model", 0.001 ether);
+    }
+
+    function getListedModels() public view returns (Model[] memory) {
+        return listedModels;
+    }
 
     function addModel(string memory _name, uint256 _price) public onlyOwner {
         uint256 _modelId = modelCount;
@@ -28,6 +34,7 @@ contract ModelMarketplace is Ownable {
 
         models[_modelId] = Model({name: _name, price: _price});
         modelExists[_modelId] = true;
+        listedModels.push(models[_modelId]);
         modelCount++;
         emit ModelAdded(_modelId, _name, _price);
     }

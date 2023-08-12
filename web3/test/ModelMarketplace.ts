@@ -26,14 +26,26 @@ describe("ModelMarketplace", function () {
     modelMarketplace = await ModelMarketplace.deploy();
     await modelMarketplace.waitForDeployment();
   });
-
+  it("Should list all models available in the market place", async function () {
+    const models = await modelMarketplace.getListedModels();
+    expect(models.length).to.eq(1);
+    const baseModelName = "Optimal control model";
+    const baseModelPrice = ethers.parseEther("0.001");
+    expect(models[0].name).to.equal(baseModelName);
+    expect(models[0].price).to.equal(baseModelPrice);
+  });
   it("Should add and purchase a model", async function () {
+    const baseModelName = "Optimal control model";
+    const baseModelId = 0;
+    const baseModelPrice = ethers.parseEther("0.001");
     const modelName = "Sample Model";
-    const modelId = 0;
+    const modelId = 1;
     const modelPrice = ethers.parseEther("1.0");
-
     // Add a model
     await modelMarketplace.addModel(modelName, modelPrice);
+    const baseModel = await modelMarketplace.models(baseModelId);
+    expect(baseModel.name).to.equal(baseModelName);
+    expect(baseModel.price).to.equal(baseModelPrice);
     const model = await modelMarketplace.models(modelId);
     expect(model.name).to.equal(modelName);
     expect(model.price).to.equal(modelPrice);
@@ -46,8 +58,11 @@ describe("ModelMarketplace", function () {
     await modelMarketplace
       .connect(endUser)
       .purchaseModel(modelId, { value: modelPrice });
-
-    // Check ownership
+    await modelMarketplace
+      .connect(endUser)
+      .purchaseModel(baseModelId, { value: baseModelPrice });
+    const userModels = await modelMarketplace.listUserModels(endUser.address);
+    expect(userModels.length).to.eq(2);
     const user1OwnsModel = await modelMarketplace.userHasModel(
       endUser.address,
       modelId
@@ -65,6 +80,9 @@ describe("ModelMarketplace", function () {
     expect(finalMarketplaceOwnerBalance).to.gt(marketplaceOwnerBalance);
   });
   it("Should add, purchase a model and list all models", async function () {
+    const baseModelName = "Optimal control model";
+    const baseModelId = 0;
+    const baseModelPrice = ethers.parseEther("0.001");
     const modelName = "Sample Model";
     const modelName2 = "Sample Model2";
     const modelPrice = ethers.parseEther("1.0");
@@ -72,8 +90,11 @@ describe("ModelMarketplace", function () {
     // Add a model
     await modelMarketplace.addModel(modelName, modelPrice);
     await modelMarketplace.addModel(modelName2, modelPrice);
+    const baseModel = await modelMarketplace.models(baseModelId);
+    expect(baseModel.name).to.equal(baseModelName);
+    expect(baseModel.price).to.equal(baseModelPrice);
     const model = await modelMarketplace.models(1);
-    expect(model.name).to.equal(modelName2);
+    expect(model.name).to.equal(modelName);
     expect(model.price).to.equal(modelPrice);
     const marketplaceOwnerBalance = await ethers.provider.getBalance(
       marketplaceOwner.address

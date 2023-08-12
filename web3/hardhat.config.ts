@@ -13,9 +13,6 @@ const config: HardhatUserConfig = {
         url: "https://goerli.base.org",
         blockNumber: 0,
       },
-      accounts: {
-        mnemonic: process.env.MNEMONIC,
-      },
     },
     local: {
       url: "http://localhost:8545",
@@ -42,6 +39,21 @@ const config: HardhatUserConfig = {
     },
   },
   defaultNetwork: "hardhat",
+  etherscan: {
+    apiKey: {
+      "base-goerli": "PLACEHOLDER_STRING",
+    },
+    customChains: [
+      {
+        network: "base-goerli",
+        chainId: 84531,
+        urls: {
+          apiURL: "https://api-goerli.basescan.org/api",
+          browserURL: "https://goerli.basescan.org",
+        },
+      },
+    ],
+  },
 };
 
 export default config;
