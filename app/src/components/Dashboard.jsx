@@ -1,30 +1,19 @@
 import { useContract, useContractRead } from "@thirdweb-dev/react";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import abi from "../utils/abi.ts";
+import { use, useEffect, useState } from "react";
+import abi from "../utils/abi.js";
 import axios from "axios";
+import computeKpis, { Kpis } from "../math/index.ts";
+import { useSimulations } from "../hooks/provider.jsx";
 const Plot = dynamic(import("react-plotly.js"), {
   ssr: false,
 });
 
 export default function Dashboard() {
-  const [simulationData, setSimulationData] = useState({});
-  const { contract, isLoading } = useContract(
-    process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
-    abi
-  );
-  const { data: modelsList, error } = useContractRead(
-    contract,
-    "getListedModels",
-    []
-  );
-  const getSimulations = async () => {
-    const response = await axios.get("/api/simulation");
-    console.log(response.data);
-    setSimulationData(response.data);
-  };
+  const { simulations } = useSimulations();
+  const [kpis, setKpis] = useState({});
   const getSeries = () => {
-    const series = simulationData?.simulations?.data?.series;
+    const series = simulations?.simulations?.data?.series;
     const serie = series[0].series;
     return {
       x: new Array(serie.length).fill(0).map((_, i) => i + 1),
@@ -32,18 +21,14 @@ export default function Dashboard() {
     };
   };
   useEffect(() => {
-    if (contract) {
-      console.log("Contract loaded!");
+    if (simulations?.simulations) {
+      const series = simulations.simulations?.data?.series;
+      const serie = series[0].series;
+      const kpis = computeKpis(serie);
+      setKpis(kpis);
+      console.log(kpis);
     }
-  }, [contract]);
-  useEffect(() => {
-    if (modelsList) {
-      console.log(modelsList[0]);
-    }
-  }, [modelsList]);
-  useEffect(() => {
-    getSimulations();
-  }, []);
+  }, [simulations]);
   return (
     <div className="container mx-auto px-12 py-24">
       <h3 className="text-gray-700 text-3xl font-bold">
@@ -79,7 +64,7 @@ export default function Dashboard() {
               insights into the token&apos;s journey within our ecosystem.
             </p>
 
-            {simulationData?.simulations?.data && (
+            {simulations?.simulations?.data && kpis?.movingInflation && (
               <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
                 <Plot
                   data={[
@@ -95,6 +80,82 @@ export default function Dashboard() {
                     title: `Token price (USD)`,
                   }}
                 />
+                <Plot
+                  data={[
+                    {
+                      x: kpis.movingInflation.x,
+                      y: kpis.movingInflation.y,
+                      type: "scatter",
+                      mode: "lines",
+                      marker: { color: "blue" },
+                    },
+                  ]}
+                  layout={{
+                    title: `Montlhy Price Variation`,
+                  }}
+                />
+                <div className="grid grid-cols-2">
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.inflationRate || 0.0,
+                      },
+                    ]}
+                    layout={{
+                      title: `Inflation Rate`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.volatility || 0.0,
+                      },
+                    ]}
+                    layout={{
+                      title: `Price Volatility`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.averageTokenPrice || 0.0,
+                      },
+                    ]}
+                    layout={{
+                      title: `Average Token Price`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.peakToTrough || 0.0,
+                      },
+                    ]}
+                    layout={{
+                      title: `Peak to Trough`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.priceMomentum || 0.0,
+                      },
+                    ]}
+                    layout={{
+                      title: `Price Momentum`,
+                    }}
+                  />
+                </div>
               </div>
             )}
           </div>
