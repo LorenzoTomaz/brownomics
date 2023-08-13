@@ -66,7 +66,7 @@ export default function Home() {
                   className="button xl main mt-lg w-button"
                 >
                   {" "}
-                  Start Predicting Now
+                  Start Testing Now
                 </Link>
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function Home() {
                 className="button xl main white mt-lg w-button"
               >
                 {" "}
-                Start Predicting Now
+                Start Testing Now
               </Link>
             </div>
           </div>
