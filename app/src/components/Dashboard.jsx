@@ -101,19 +101,6 @@ export default function Dashboard() {
                       title: `Price Momentum`,
                     }}
                   />
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.inflationRate || 0.0,
-                        domain: { row: 0, column: 4 },
-                      },
-                    ]}
-                    layout={{
-                      title: `Inflation Rate`,
-                    }}
-                  />
                 </div>
 
                 <Plot
