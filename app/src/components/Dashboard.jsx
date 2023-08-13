@@ -63,7 +63,7 @@ export default function Dashboard() {
 
             {simulations?.simulations?.data && kpis?.movingInflation && (
               <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
-                <div className="grid grid-cols-2 w-full bg-white">
+                <div className="grid lg:grid-cols-2 grid-cols-1 w-full bg-white">
                   <Plot
                     data={[
                       {
