@@ -185,7 +185,7 @@ export default function Home() {
           <div className="row">
             <div className="column align-center">
               <div className="muted text-lg">
-                Made with love by ❤️ by{" "}
+                Made with love ❤️ by{" "}
                 <Link href="https://ae.studio">AE Studio</Link>
               </div>
             </div>
