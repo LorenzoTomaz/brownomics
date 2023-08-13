@@ -86,10 +86,8 @@ export default function NavBar() {
             value: model.price,
           },
         });
-        console.log("result: ", result);
         toast("Model purchased successfully", { type: "success" });
       } catch (err) {
-        console.log(err);
         toast("Something went wrong", { type: "error" });
       }
     }
@@ -100,7 +98,6 @@ export default function NavBar() {
   const hasModel = async (id) => {
     if (address) {
       const data = await contract.call("userHasModel", [address, id]);
-      console.log(`hasModel #${id}: `, data);
       return data;
     }
     return false;
@@ -120,10 +117,6 @@ export default function NavBar() {
     };
     loader();
   }, [modelsList]);
-  useEffect(() => {
-    console.log("modelProfile");
-    console.log(modelProfile);
-  }, [modelProfile]);
   return (
     <div
       className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${

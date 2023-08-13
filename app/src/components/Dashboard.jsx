@@ -23,7 +23,6 @@ export default function Dashboard() {
       const serie = series[0].series;
       const kpis = computeKpis(serie);
       setKpis(kpis);
-      console.log(kpis);
     }
   }, [simulations]);
   return (
