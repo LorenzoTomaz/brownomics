@@ -1,9 +1,6 @@
-import { useContract, useContractRead } from "@thirdweb-dev/react";
 import dynamic from "next/dynamic";
-import { use, useEffect, useState } from "react";
-import abi from "../utils/abi.js";
-import axios from "axios";
-import computeKpis, { Kpis } from "../math/index.ts";
+import { useEffect, useState } from "react";
+import computeKpis from "../math/index.ts";
 import { useSimulations } from "../hooks/provider.jsx";
 const Plot = dynamic(import("react-plotly.js"), {
   ssr: false,
@@ -26,7 +23,6 @@ export default function Dashboard() {
       const serie = series[0].series;
       const kpis = computeKpis(serie);
       setKpis(kpis);
-      console.log(kpis);
     }
   }, [simulations]);
   return (
@@ -52,6 +48,61 @@ export default function Dashboard() {
 
             {simulations?.simulations?.data && kpis?.movingInflation && (
               <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
+                <div className="grid lg:grid-cols-2 grid-cols-1 w-full bg-white">
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.volatility || 0.0,
+                        domain: { row: 0, column: 0 },
+                      },
+                    ]}
+                    layout={{
+                      title: `Price Volatility`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.averageTokenPrice || 0.0,
+                        domain: { row: 0, column: 1 },
+                      },
+                    ]}
+                    layout={{
+                      title: `Average Token Price`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.peakToTrough || 0.0,
+                        domain: { row: 0, column: 2 },
+                      },
+                    ]}
+                    layout={{
+                      title: `Peak to Trough`,
+                    }}
+                  />
+                  <Plot
+                    data={[
+                      {
+                        type: "indicator",
+                        mode: "number+delta",
+                        value: kpis?.priceMomentum || 0.0,
+                        domain: { row: 0, column: 3 },
+                      },
+                    ]}
+                    layout={{
+                      title: `Price Momentum`,
+                    }}
+                  />
+                </div>
+
                 <Plot
                   data={[
                     {
@@ -80,68 +131,6 @@ export default function Dashboard() {
                     title: `Montlhy Price Variation`,
                   }}
                 />
-                <div className="grid grid-cols-2">
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.inflationRate || 0.0,
-                      },
-                    ]}
-                    layout={{
-                      title: `Inflation Rate`,
-                    }}
-                  />
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.volatility || 0.0,
-                      },
-                    ]}
-                    layout={{
-                      title: `Price Volatility`,
-                    }}
-                  />
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.averageTokenPrice || 0.0,
-                      },
-                    ]}
-                    layout={{
-                      title: `Average Token Price`,
-                    }}
-                  />
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.peakToTrough || 0.0,
-                      },
-                    ]}
-                    layout={{
-                      title: `Peak to Trough`,
-                    }}
-                  />
-                  <Plot
-                    data={[
-                      {
-                        type: "indicator",
-                        mode: "number+delta",
-                        value: kpis?.priceMomentum || 0.0,
-                      },
-                    ]}
-                    layout={{
-                      title: `Price Momentum`,
-                    }}
-                  />
-                </div>
               </div>
             )}
           </div>

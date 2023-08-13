@@ -20,7 +20,6 @@ import Logo from "../../public/logo-dash.svg";
 import Image from "next/image";
 export default function NavBar() {
   const [show, setShow] = useState(true);
-  // this.value=this.value.replace(/[^0-9]/g,'')
   const [value, setValue] = useState({
     initial_state: 100.0,
     time_horizon: 365,
@@ -46,22 +45,21 @@ export default function NavBar() {
     process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
     abi
   );
-  const [modelProfile, setModelProfile] = useState([]); // [modelProfile, setModelProfile
+  const [modelProfile, setModelProfile] = useState([]);
   const [kpis, setKpis] = useState({});
   const { data: modelsList } = useContractRead(contract, "getListedModels", []);
-  const { data: userHasModel } = useContractRead(contract, "userHasModel", []);
   const { mutateAsync: purchaseModel } = useContractWrite(
     contract,
     "purchaseModel"
   );
   const simulateOrBuy = async () => {
-    if (value.model == null && value.model == undefined) {
+    if (!value.hasOwnProperty("model")) {
       toast("Model is required", { type: "error" });
       return;
     }
     try {
       if (shouldBuyModel(value?.model)) {
-        buyModel();
+        await buyModel();
       } else {
         const response = await axios.post("/api/simulation", value);
         setSimulationData(response.data);
@@ -79,7 +77,7 @@ export default function NavBar() {
   };
   const buyModel = async () => {
     const modelId = value?.model;
-    if (modelId) {
+    if (modelId != null) {
       const model = modelProfile.find((model) => model.id === modelId);
       try {
         const result = await purchaseModel({
@@ -88,10 +86,8 @@ export default function NavBar() {
             value: model.price,
           },
         });
-        console.log("result: ", result);
         toast("Model purchased successfully", { type: "success" });
       } catch (err) {
-        console.log(err);
         toast("Something went wrong", { type: "error" });
       }
     }
@@ -102,7 +98,6 @@ export default function NavBar() {
   const hasModel = async (id) => {
     if (address) {
       const data = await contract.call("userHasModel", [address, id]);
-      console.log(`hasModel #${id}: `, data);
       return data;
     }
     return false;
@@ -122,10 +117,6 @@ export default function NavBar() {
     };
     loader();
   }, [modelsList]);
-  useEffect(() => {
-    console.log("modelProfile");
-    console.log(modelProfile);
-  }, [modelProfile]);
   return (
     <div
       className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${

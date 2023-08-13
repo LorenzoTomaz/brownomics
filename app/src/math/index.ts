@@ -1,7 +1,6 @@
 type PriceArray = number[];
 
 export interface Kpis {
-  inflationRate: number;
   volatility: number;
   averageTokenPrice: number;
   peakToTrough: number;
@@ -11,11 +10,12 @@ export interface Kpis {
 
 // 1. Inflation Rate
 export function computeInflationRate(y: PriceArray): number {
-  if (y.length < 2) {
+  const norm_y = normalizeData(y);
+  if (norm_y.length < 2) {
     return 0; // Not enough data points
   }
-  let startPrice = y[0];
-  let endPrice = y[y.length - 1];
+  let startPrice = norm_y[0];
+  let endPrice = norm_y[norm_y.length - 1];
   return ((endPrice - startPrice) / startPrice) * 100;
 }
 
@@ -95,7 +95,6 @@ export function computeMovingInflation(
 
 export default function computeKpis(y: PriceArray): Kpis {
   return {
-    inflationRate: computeInflationRate(y),
     volatility: computeVolatility(y),
     averageTokenPrice: computeAverageTokenPrice(y),
     peakToTrough: computePeakToTrough(y),

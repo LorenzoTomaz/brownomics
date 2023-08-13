@@ -21,8 +21,6 @@ export default async function handler(
     );
     res.status(200).json({ simulations: simulations.data });
   } catch (error) {
-    console.log("simulations?.data");
-    console.log(error);
     if (simulations?.status === 400) {
       return res.status(400).json({ error: simulations.data });
     }
