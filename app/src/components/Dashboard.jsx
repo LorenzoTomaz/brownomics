@@ -37,31 +37,17 @@ export default function Dashboard() {
       <div className="flex flex-col mt-8">
         <div className="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="flex flex-col gap-6 min-w-full overflow-hidden sm:rounded-lg text-gray-700 p-4 ">
-            {/* <p>
-              Understanding Token Price Fluctuations: In the world of web
-              applications, token prices can change due to various factors,
-              similar to how stocks fluctuate in the financial markets. The
-              chart you see on this page visualizes these changes over time.
-              This information is crucial for grasping our tokenomics strategy,
-              which involves how we manage the supply and demand of the tokens.
-              By studying the chart, you can gain insights into how external
-              factors and user interactions impact token prices. Keep in mind
-              that analyzing these patterns can help you make informed decisions
-              while using our platform.
-            </p> */}
             <p>
               Our platform&apos;s simulation of token price variations is a
-              powerful tool for understanding the dynamics of our token&apos;s
-              value. We achieved this by integrating historical data and
-              mathematical models into our system. As users interact with the
-              platform, their actions influence the token&apos;s supply and
-              demand, causing price shifts. The simulation takes into account
-              factors such as buying, selling, and external events, then
-              projects how these actions might impact the token&apos;s value
-              over time. This enables us to anticipate potential trends and
-              ensure our tokenomics strategy aligns with user behavior. By
-              observing the simulated price changes, users gain valuable
-              insights into the token&apos;s journey within our ecosystem.
+              powerful tool for understanding the dynamics of tokenomics. We
+              achieved this by integrating testing tools and mathematical models
+              into our system. The simulation takes into account factors such as
+              buying, selling, and external events, then projects how these
+              actions might impact the token&apos;s value over time. This
+              enables us to anticipate potential trends and ensure our
+              tokenomics strategy aligns with user behavior. By observing the
+              simulated price changes, users gain valuable insights into the
+              token&apos;s journey within our ecosystem.
             </p>
 
             {simulations?.simulations?.data && kpis?.movingInflation && (

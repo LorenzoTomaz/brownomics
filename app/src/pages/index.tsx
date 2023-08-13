@@ -4,7 +4,8 @@ import Dashboard from "../components/Dashboard";
 import NavBar from "../components/NavBar";
 import Link from "next/link";
 import Script from "next/script";
-
+import Logo from "../../public/logo.svg";
+import Image from "next/image";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -24,7 +25,11 @@ export default function Home() {
             <div className="column align-left">
               <Link href="#" aria-current="page" className="w-inline-block">
                 <div className="logo">
-                  <span className="emoji mr-md">🌎</span> Brownomics
+                  <div className="flex items-center justify-center w-full pt-3">
+                    <span className="text-black text-2xl mx-2 font-semibold">
+                      <Image priority src={Logo} alt="Brownomics" width={350} />
+                    </span>
+                  </div>
                 </div>
               </Link>
             </div>
@@ -46,20 +51,24 @@ export default function Home() {
           <div className="row">
             <div className="flex justify-center column align-center">
               <h1 className="test-giga text-center">
-                Unlock economic insights and forecast market trends with
-                Brownomics.
+                Unlock tokenomics insights with Brownomics.
               </h1>
               <p className="text-lg text-center max-w-lg">
                 {" "}
                 Explore our comprehensive charts and simulation tools to gain a
-                deeper understanding of market inflation and deflation. With
-                Brownomics, you&#39;ll have the power to make informed decisions
-                and stay ahead of the curve.
+                deeper understanding of tokenomics Kpis. With Brownomics,
+                you&#39;ll have the power to make informed decisions and stay
+                ahead of the curve.
               </p>
-              <Link href="/dashboard" className="button xl main mt-lg w-button">
-                {" "}
-                Start Predicting Now
-              </Link>
+              <div className="mt-10">
+                <Link
+                  href="/dashboard"
+                  className="button xl main mt-lg w-button"
+                >
+                  {" "}
+                  Start Predicting Now
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -70,13 +79,12 @@ export default function Home() {
           <div className="row">
             <div className="column align-center">
               <h2 className="max-w-lg text-center">
-                Unlock the power of economics forecasting with Brownomics.
+                Unlock the power of tokenomics validation with Brownomics.
               </h2>
               <p className="text-lg text-center max-w-md">
-                Gain valuable insights into market inflation and deflation with
-                our powerful token price and token price v2 charts. With
+                Gain valuable Kpis with our powerful simulation models. With
                 Brownomics, you can simulate various scenarios to make informed
-                decisions and predict future trends in the market.
+                decisions.
               </p>
             </div>
           </div>
@@ -94,14 +102,14 @@ export default function Home() {
                 {" "}
                 Stay ahead of the market with Brownomics. Our 24/7 crypto
                 economics service is always ready to help you navigate the world
-                of cryptocurrency. With our powerful charts and forecasting
+                of cryptocurrency. With our powerful charts and simulation
                 tools, you can unlock valuable insights and make informed
-                decisions in a volatile market.
+                decisions about your next tokenomics strategies.
               </p>
             </div>
             <div className="column align-center p-2xl">
               <img
-                src="http://api.writesonic.com/static/images/marginalia-coming-soon.png"
+                src="/images/marginalia-coming-soon.png"
                 alt=""
                 className="feature-card"
               />
@@ -111,20 +119,20 @@ export default function Home() {
             <div className="column align-left p-2xl">
               <h6 className="max-w-lg">#2 Feature</h6>
               <h2 className="max-w-lg">
-                Scale your project with intelligent forecasting.
+                Scale your project with intelligent simulation tools.
               </h2>
               <p className="text-lg">
                 {" "}
                 Don&#39;t rely on guesswork when it comes to scaling your
                 project. With Brownomics, leverage the power of machine learning
-                to make accurate simulations and forecasts. Stay ahead of market
-                inflation and deflation and ensure a healthy growth trajectory
-                for your project.
+                to stress-test your tokenomics. Stay ahead of market inflation
+                and deflation and ensure a healthy growth trajectory for your
+                project.
               </p>
             </div>
             <div className="column align-center p-2xl">
               <img
-                src="http://api.writesonic.com/static/images/marginalia-online-shopping.png"
+                src="/images/marginalia-online-shopping.png"
                 alt=""
                 className="feature-card"
               />
@@ -134,19 +142,19 @@ export default function Home() {
             <div className="column align-left p-2xl">
               <h6 className="max-w-lg">#3 Feature</h6>
               <h2 className="max-w-lg">
-                Take control of your financial future with Brownomics.
+                Powerfull testing tools for tokenomics validation.
               </h2>
               <p className="text-lg">
                 {" "}
-                Don&#39;t miss out on the opportunity to forecast and simulate
-                market trends. With Brownomics, you can take control of your
-                financial future and make informed decisions. Start now and
-                enjoy our limited-time promotion.
+                With Brownomics, you can test your tokenomics strategy in a
+                simulated environment. Our powerful testing tools allow you to
+                stress-test your tokenomics strategy and ensure a healthy growth
+                trajectory for your project.
               </p>
             </div>
             <div className="column align-center p-2xl">
               <img
-                src="http://api.writesonic.com/static/images/marginalia-order-complete.png"
+                src="/images/marginalia-order-complete.png"
                 alt=""
                 className="feature-card"
               />
@@ -154,11 +162,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="section" style={{ backgroundColor: "#4263eb" }}>
+      <div className="section" style={{ backgroundColor: "#602020" }}>
         <div className="container mt-lg mb-2xl">
           <div className="row items-center">
             <div className="column align-center">
-              <h1 className="max-w-lg text-giga text-center text-white">
+              <h1 className="text-giga text-center text-white">
                 Unlock the power of economic forecasting with Brownomics.
               </h1>
               <Link
