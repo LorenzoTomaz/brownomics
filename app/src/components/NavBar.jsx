@@ -18,7 +18,6 @@ import { useSimulations } from "../hooks/provider.jsx";
 import abi from "../utils/abi.js";
 export default function NavBar() {
   const [show, setShow] = useState(true);
-  // this.value=this.value.replace(/[^0-9]/g,'')
   const [value, setValue] = useState({
     initial_state: 100.0,
     time_horizon: 365,
@@ -44,22 +43,21 @@ export default function NavBar() {
     process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
     abi
   );
-  const [modelProfile, setModelProfile] = useState([]); // [modelProfile, setModelProfile
+  const [modelProfile, setModelProfile] = useState([]);
   const [kpis, setKpis] = useState({});
   const { data: modelsList } = useContractRead(contract, "getListedModels", []);
-  const { data: userHasModel } = useContractRead(contract, "userHasModel", []);
   const { mutateAsync: purchaseModel } = useContractWrite(
     contract,
     "purchaseModel"
   );
   const simulateOrBuy = async () => {
-    if (!value.model) {
+    if (!value.hasOwnProperty('model')) {
       toast("Model is required", { type: "error" });
       return;
     }
     try {
       if (shouldBuyModel(value?.model)) {
-        buyModel();
+        await buyModel();
       } else {
         const response = await axios.post("/api/simulation", value);
         setSimulationData(response.data);
@@ -77,7 +75,7 @@ export default function NavBar() {
   };
   const buyModel = async () => {
     const modelId = value?.model;
-    if (modelId) {
+    if (modelId != null) {
       const model = modelProfile.find((model) => model.id === modelId);
       try {
         const result = await purchaseModel({
