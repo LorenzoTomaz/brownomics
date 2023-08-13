@@ -63,9 +63,8 @@ export default function Dashboard() {
 
             {simulations?.simulations?.data && kpis?.movingInflation && (
               <div className="flex flex-wrap md:flex-row gap-6 justify-around w-full">
-                <div className="flex flex-row w-full overflow-hidden">
+                <div className="grid grid-cols-2 w-full bg-white">
                   <Plot
-                    className="basis-1/5"
                     data={[
                       {
                         type: "indicator",
@@ -79,7 +78,6 @@ export default function Dashboard() {
                     }}
                   />
                   <Plot
-                    className="basis-1/5"
                     data={[
                       {
                         type: "indicator",
@@ -93,7 +91,6 @@ export default function Dashboard() {
                     }}
                   />
                   <Plot
-                    className="basis-1/5"
                     data={[
                       {
                         type: "indicator",
@@ -107,7 +104,6 @@ export default function Dashboard() {
                     }}
                   />
                   <Plot
-                    className="basis-1/5"
                     data={[
                       {
                         type: "indicator",
@@ -121,7 +117,6 @@ export default function Dashboard() {
                     }}
                   />
                   <Plot
-                    className="basis-1/5"
                     data={[
                       {
                         type: "indicator",
