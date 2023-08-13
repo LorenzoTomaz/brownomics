@@ -211,7 +211,9 @@ export default function NavBar() {
                 </Select.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">Time Horizon</Label.Root>
+                <Label.Root className="font-semibold">
+                  Simulation Duration (days)
+                </Label.Root>
                 <Slider
                   width="100%"
                   defaultValue={[value.time_horizon]}
@@ -226,7 +228,9 @@ export default function NavBar() {
                 {value.time_horizon}
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">N Simulation</Label.Root>
+                <Label.Root className="font-semibold">
+                  Number of Simulations
+                </Label.Root>
                 <Slider
                   width="100%"
                   defaultValue={[value.n_simulation]}
@@ -241,7 +245,9 @@ export default function NavBar() {
                 {value.n_simulation}
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">p Tok t</Label.Root>
+                <Label.Root className="font-semibold">
+                  Current Token Price
+                </Label.Root>
                 <TextField.Root>
                   <TextField.Input
                     color="orange"
@@ -252,7 +258,9 @@ export default function NavBar() {
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">s_t</Label.Root>
+                <Label.Root className="font-semibold">
+                  Tokens in Circulation
+                </Label.Root>
                 <TextField.Root>
                   <TextField.Input
                     type="number"
@@ -262,7 +270,9 @@ export default function NavBar() {
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">Gama</Label.Root>
+                <Label.Root className="font-semibold">
+                  Future Earnings Discount Factor
+                </Label.Root>
                 <TextField.Root>
                   <TextField.Input
                     type="number"
@@ -287,7 +297,7 @@ export default function NavBar() {
               </Flex>
               <Flex direction="column">
                 <Label.Root className="font-semibold">
-                  Initial Population
+                  Initial User Base
                 </Label.Root>
                 <TextField.Root>
                   <TextField.Input
@@ -300,7 +310,10 @@ export default function NavBar() {
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className="font-semibold">Adoption Rate</Label.Root>
+                <Label.Root className="font-semibold">
+                  Token Adoption Rate (% per step)
+                </Label.Root>
+
                 <TextField.Root>
                   <TextField.Input
                     type="number"
