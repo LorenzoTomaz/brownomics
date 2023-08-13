@@ -71,6 +71,13 @@ export function computeInflationRateForPeriod(
   return ((endPrice - startPrice) / startPrice) * 100;
 }
 
+function normalizeData(data: number[]): number[] {
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+
+  return data.map((value) => (value - min) / (max - min));
+}
+
 export function computeMovingInflation(
   y: PriceArray,
   windowSize: number = 30
@@ -80,8 +87,10 @@ export function computeMovingInflation(
     let inflationRate = computeInflationRateForPeriod(y, i - windowSize, i - 1);
     results.push(inflationRate);
   }
+  results.pop(); // Remove last element because it's not a full window
   const x = results.map((_, i) => (i + 1) * windowSize);
-  return { y: results, x };
+
+  return { y: normalizeData(results), x };
 }
 
 export default function computeKpis(y: PriceArray): Kpis {

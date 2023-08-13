@@ -1,52 +1,134 @@
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { toast } from 'react-toastify';
-
-import * as Label from '@radix-ui/react-label';
+import { toast } from "react-toastify";
+import axios from "axios";
+import * as Label from "@radix-ui/react-label";
+import { Flex, Select, Slider, TextField } from "@radix-ui/themes";
 import {
-  Flex,
-  Select,
-  Slider,
-  TextField,
-} from '@radix-ui/themes';
-import { ConnectWallet } from '@thirdweb-dev/react';
-
+  ConnectWallet,
+  useContract,
+  useContractRead,
+  useAddress,
+  useContractWrite,
+} from "@thirdweb-dev/react";
+import computeKpis, { Kpis } from "../math/index.ts";
+import { useSimulations } from "../hooks/provider.jsx";
+import abi from "../utils/abi.js";
 export default function NavBar() {
   const [show, setShow] = useState(true);
   // this.value=this.value.replace(/[^0-9]/g,'')
   const [value, setValue] = useState({
-    initialState: 100.0,
-    timeHorizon: 365,
-    nSimulation: 1,
-    pTokT: 10,
-    sT: 1000000,
+    initial_state: 100.0,
+    time_horizon: 365,
+    n_simulation: 1,
+    p_tok_t: 10,
+    s_t: 1000000,
     gama: 0.9,
-    expectedFuturePrice: 11,
-    initialPopulation: 100,
-    adoptionRate: 0.1
-  })
+    expected_future_price: 11,
+    initial_population: 100,
+    adoption_rate: 0.1,
+  });
 
   const onChange = (field, newValue) => {
     setValue({
       ...value,
-      [field]: newValue
-    })
-  }
-
-
-  const simulate = () => {
-    console.log(value)
-    if(!value.model){
-      toast("Model is required", { type: "error"})
-      return
+      [field]: newValue,
+    });
+  };
+  const address = useAddress();
+  const { simulations, persistSimulations } = useSimulations();
+  const [simulationData, setSimulationData] = useState({});
+  const { contract, isLoading } = useContract(
+    process.env.NEXT_PUBLIC_TEMPLATE_MARKETPLACE_CONTRACT_ADDRESS,
+    abi
+  );
+  const [modelProfile, setModelProfile] = useState([]); // [modelProfile, setModelProfile
+  const [kpis, setKpis] = useState({});
+  const { data: modelsList } = useContractRead(contract, "getListedModels", []);
+  const { data: userHasModel } = useContractRead(contract, "userHasModel", []);
+  const { mutateAsync: purchaseModel } = useContractWrite(
+    contract,
+    "purchaseModel"
+  );
+  const simulateOrBuy = async () => {
+    if (!value.model) {
+      toast("Model is required", { type: "error" });
+      return;
     }
-  }
-
+    try {
+      if (shouldBuyModel(value?.model)) {
+        buyModel();
+      } else {
+        const response = await axios.post("/api/simulation", value);
+        setSimulationData(response.data);
+        persistSimulations(response.data);
+        const series = response?.data?.simulations?.data?.series;
+        const serie = series[0].series;
+        const kpis = computeKpis(serie);
+        setKpis(kpis);
+      }
+    } catch (err) {
+      toast("The simulations api seems to be unavailable at the moment", {
+        type: "error",
+      });
+    }
+  };
+  const buyModel = async () => {
+    const modelId = value?.model;
+    if (modelId) {
+      const model = modelProfile.find((model) => model.id === modelId);
+      try {
+        const result = await purchaseModel({
+          args: [modelId],
+          overrides: {
+            value: model.price,
+          },
+        });
+        console.log("result: ", result);
+        toast("Model purchased successfully", { type: "success" });
+      } catch (err) {
+        console.log(err);
+        toast("Something went wrong", { type: "error" });
+      }
+    }
+  };
+  const shouldBuyModel = (id) => {
+    return !modelProfile.find((model) => model.id === id)?.hasModel;
+  };
+  const hasModel = async (id) => {
+    if (address) {
+      const data = await contract.call("userHasModel", [address, id]);
+      console.log(`hasModel #${id}: `, data);
+      return data;
+    }
+    return false;
+  };
+  useEffect(() => {
+    const loader = async () => {
+      setModelProfile(
+        await Promise.all(
+          (modelsList || []).map(async (model, i) => ({
+            name: model.name,
+            price: model.price,
+            id: i,
+            hasModel: await hasModel(i),
+          }))
+        )
+      );
+    };
+    loader();
+  }, [modelsList]);
+  useEffect(() => {
+    console.log("modelProfile");
+    console.log(modelProfile);
+  }, [modelProfile]);
   return (
     <div
-      className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${show ? "w-96" : "w-12" }`}
+      className={`fixed z-30 inset-y-0 left-0 transition duration-300 transform bg-gray-900 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0 ${
+        show ? "w-96" : "w-12"
+      }`}
     >
       <div className="relative h-10">
         <button
@@ -117,94 +199,150 @@ export default function NavBar() {
                 BROWNOMICS
               </span>
             </div>
-            <Flex direction="column" gap="4" width="100%" className='text-white text-extrabold'>
+            <Flex
+              direction="column"
+              gap="4"
+              width="100%"
+              className="text-white text-extrabold"
+            >
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  Model
-                </Label.Root>
-                <Select.Root value={value.model} onValueChange={modelValue => onChange('model', modelValue)}>
+                <Label.Root className="font-semibold">Model</Label.Root>
+                <Select.Root
+                  value={value.model}
+                  onValueChange={(modelValue) => onChange("model", modelValue)}
+                >
                   <Select.Trigger placeholder="Select a model" />
                   <Select.Content>
                     <Select.Group>
-                      <Select.Item value="A" onSelect={a => alert(a)}>A</Select.Item>
-                      <Select.Item value="B">B</Select.Item>
+                      {modelProfile?.map((model, i) => (
+                        <Select.Item
+                          value={model.id}
+                          textValue={model.name}
+                          key={i}
+                        >
+                          {model.name}
+                        </Select.Item>
+                      ))}
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  Interval
-                </Label.Root>
+                <Label.Root className="font-semibold">Time Horizon</Label.Root>
+                <Slider
+                  width="100%"
+                  defaultValue={[value.time_horizon]}
+                  min={0}
+                  max={366}
+                  variant="classic"
+                  className="bg-blue-600"
+                  onValueChange={(newValue) =>
+                    onChange("time_horizon", newValue)
+                  }
+                />
+                {value.time_horizon}
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className="font-semibold">N Simulation</Label.Root>
+                <Slider
+                  width="100%"
+                  defaultValue={[value.n_simulation]}
+                  min={1}
+                  max={2}
+                  variant="classic"
+                  className="bg-blue-600"
+                  onValueChange={(newValue) =>
+                    onChange("n_simulation", newValue)
+                  }
+                />
+                {value.n_simulation}
+              </Flex>
+              <Flex direction="column">
+                <Label.Root className="font-semibold">p Tok t</Label.Root>
                 <TextField.Root>
-                  <TextField.Input placeholder="Interval" type='number' min={0} max={366} maxLength={3} value={value.initialState} onChange={(e) => onChange('interval', e.target.value)} />
+                  <TextField.Input
+                    color="orange"
+                    type="number"
+                    value={value.p_tok_t}
+                    onChange={(e) => onChange("p_tok_t", e.target.value)}
+                  />
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  Time Horizon
-                </Label.Root>
-                <Slider width="100%" defaultValue={[value.timeHorizon]} min={0} max={366} variant="classic" className='bg-blue-600' onValueChange={newValue => onChange('timeHorizon', newValue)} />
-                {value.timeHorizon}
-              </Flex>
-              <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  N Simulation
-                </Label.Root>
-                <Slider width="100%" defaultValue={[value.nSimulation]} min={1} max={2} variant="classic" className='bg-blue-600' onValueChange={newValue => onChange('nSimulation', newValue)} />
-                {value.nSimulation}
-              </Flex>
-              <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  p Tok t
-                </Label.Root>
+                <Label.Root className="font-semibold">s_t</Label.Root>
                 <TextField.Root>
-                  <TextField.Input type='number' value={value.pTokT} onChange={(e) => onChange('pTokT', e.target.value)} />
+                  <TextField.Input
+                    type="number"
+                    value={value.s_t}
+                    onChange={(e) => onChange("s_t", e.target.value)}
+                  />
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  sT
-                </Label.Root>
+                <Label.Root className="font-semibold">Gama</Label.Root>
                 <TextField.Root>
-                  <TextField.Input type='number' value={value.sT} onChange={(e) => onChange('sT', e.target.value)} />
+                  <TextField.Input
+                    type="number"
+                    value={value.gama}
+                    onChange={(e) => onChange("gama", e.target.value)}
+                  />
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  Gama
-                </Label.Root>
-                <TextField.Root>
-                  <TextField.Input type='number' value={value.gama} onChange={(e) => onChange('gama', e.target.value)} />
-                </TextField.Root>
-              </Flex>
-              <Flex direction="column">
-                <Label.Root className='font-semibold'>
+                <Label.Root className="font-semibold">
                   Expected Future Price
                 </Label.Root>
                 <TextField.Root>
-                  <TextField.Input type='number' value={value.expectedFuturePrice} onChange={(e) => onChange('expectedFuturePrice', e.target.value)} />
+                  <TextField.Input
+                    type="number"
+                    value={value.expected_future_price}
+                    onChange={(e) =>
+                      onChange("expected_future_price", e.target.value)
+                    }
+                  />
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
+                <Label.Root className="font-semibold">
                   Initial Population
                 </Label.Root>
                 <TextField.Root>
-                  <TextField.Input type='number' value={value.initialPopulation} onChange={(e) => onChange('initialPopulation', e.target.value)} />
+                  <TextField.Input
+                    type="number"
+                    value={value.initial_population}
+                    onChange={(e) =>
+                      onChange("initial_population", e.target.value)
+                    }
+                  />
                 </TextField.Root>
               </Flex>
               <Flex direction="column">
-                <Label.Root className='font-semibold'>
-                  Adoption Rate
-                </Label.Root>
+                <Label.Root className="font-semibold">Adoption Rate</Label.Root>
                 <TextField.Root>
-                  <TextField.Input type='number' value={value.adoptionRate} onChange={(e) => onChange('adoptionRate', e.target.value)} />
+                  <TextField.Input
+                    type="number"
+                    value={value.adoption_rate}
+                    onChange={(e) => onChange("adoption_rate", e.target.value)}
+                  />
                 </TextField.Root>
               </Flex>
-              <button type='submit' className='bg-blue-600 py-1.5 rounded w-full' onClick={simulate}>Run</button>
-              <div className='flex my-10 w-full justify-center'>
-                <ConnectWallet className='my-10 w-full'
+              <button
+                type="submit"
+                className={
+                  "py-1.5 rounded w-full" +
+                  (shouldBuyModel(value?.model)
+                    ? " bg-green-500"
+                    : " bg-blue-500")
+                }
+                onClick={simulateOrBuy}
+              >
+                {shouldBuyModel(value?.model) && value?.model != undefined
+                  ? "Buy Model"
+                  : "Simulate"}
+              </button>
+              <div className="flex my-10 w-full justify-center">
+                <ConnectWallet
+                  className="my-10 w-full"
                   dropdownPosition={{
                     side: "bottom",
                     align: "center",
